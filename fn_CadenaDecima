@@ -1,0 +1,25 @@
+CREATE FUNCTION [dbo].[fn_CadenaDecimal] (@CadenaDecimal AS VARCHAR(32))
+/************************************************************
+ * Time: 04/09/2019 12:38:32
+ Recivimos un valor de cadena y construimos un número decimal separado 
+ 	por @SeparadorAnterior y lo separamos por  @SeparadorNuevo con unicamente @Decimales decimales
+ ************************************************************/
+RETURNS VARCHAR(32)	
+BEGIN
+	DECLARE @SeparadorNuevo AS VARCHAR(1)
+	DECLARE @SeparadorAnterior AS VARCHAR(1) 
+	DECLARE @Decimales AS INT
+		SET @SeparadorAnterior='.'
+		SET @SeparadorNuevo=','
+		SET @Decimales=2
+		
+	RETURN (
+		SELECT	
+		CASE 
+			WHEN CHARINDEX(@SeparadorNuevo,REPLACE(@CadenaDecimal,@SeparadorAnterior,@SeparadorNuevo))=0 THEN @CadenaDecimal+@SeparadorNuevo+REPLICATE('0',@Decimales)
+		ELSE SUBSTRING(REPLACE(@CadenaDecimal,@SeparadorAnterior,@SeparadorNuevo),1,CHARINDEX(@SeparadorNuevo,REPLACE(@CadenaDecimal,@SeparadorAnterior,@SeparadorNuevo))) +	SUBSTRING(SUBSTRING(REPLACE(@CadenaDecimal,@SeparadorAnterior,@SeparadorNuevo),CHARINDEX(@SeparadorNuevo,REPLACE(@CadenaDecimal,@SeparadorAnterior,@SeparadorNuevo)),LEN(REPLACE(@CadenaDecimal,@SeparadorAnterior,@SeparadorNuevo))),2,@Decimales) 
+		END AS NumeroCorregido		
+	)
+
+      
+END
