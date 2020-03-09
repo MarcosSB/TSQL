@@ -1,0 +1,28 @@
+CREATE FUNCTION [fn_FormatHoursMinutesSeconds] (@Seconds INT)
+	RETURNS varchar(10) as 
+BEGIN
+	DECLARE @hh AS integer
+	DECLARE @mm AS integer
+	DECLARE @ss AS integer
+	DECLARE @fHoursMinutesSeconds AS varchar(10)
+
+	SET @hh = (@Seconds/3600)
+	SET @mm = (@Seconds-(@hh*3600))/60
+	SET @ss = (@Seconds-((@hh*3600)+(@mm*60)))
+
+	IF LEN(@hh) > 2
+	BEGIN
+		SET @fHoursMinutesSeconds =	RIGHT('0000'+CONVERT(varchar,@hh),4)+':'+
+						RIGHT('00'+CONVERT(varchar,@mm),2)+':'+
+						RIGHT('00'+CONVERT(varchar,@ss),2)
+	END
+	ELSE
+		BEGIN
+			SET @fHoursMinutesSeconds =	RIGHT('00'+CONVERT(varchar,@hh),2)+':'+
+							RIGHT('00'+CONVERT(varchar,@mm),2)+':'+
+							RIGHT('00'+CONVERT(varchar,@ss),2)
+		END
+
+	RETURN  @fHoursMinutesSeconds
+END
+GO
