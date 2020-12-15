@@ -14,7 +14,7 @@ CREATE FUNCTION [dbo].[fn_ParserIndexed](
 BEGIN
 	DECLARE @sItem VARCHAR(1000)
 	DECLARE @sDelimiter VARCHAR(1)
-	DECLARE @List TABLE (item VARCHAR(1000),Orden INT IDENTITY(1,1) NOT NULL)
+	DECLARE @List TABLE (item VARCHAR(1000),Order INT IDENTITY(1,1) NOT NULL)
 
 	SET  @sDelimiter = ';'
 	WHILE CHARINDEX(@sDelimiter,@sInputList,0) <> 0
@@ -36,7 +36,7 @@ BEGIN
 		(
 			SELECT item
 			FROM @List
-			WHERE Orden=@sIndex
+			WHERE Order=@sIndex
 		)
 
 END
