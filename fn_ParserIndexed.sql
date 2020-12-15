@@ -6,17 +6,16 @@ Es habitual en algunas cargas que te mande, por ejemplo, la dirección así:
 AL;SAN SEBASTIAN;1;;;;SAN SEBASTIAN (GONDOMAR);PONTEVEDRA;36388
 Y para cargar el elemento correctamente en base se utiliza esta función.
 *******************************************/
-CREATE FUNCTION [dbo].[fn_ParserIndexed](
+CREATE FUNCTION [dbo].[ParserIndexed](
     @sInputList VARCHAR(1000), -- List of delimited items
-    @sIndex INT 
+    @sIndex INT,
+	@sDelimiter VARCHAR(1) = ';'
 ) RETURNS NVARCHAR(150)
 
 BEGIN
 	DECLARE @sItem VARCHAR(1000)
-	DECLARE @sDelimiter VARCHAR(1)
-	DECLARE @List TABLE (item VARCHAR(1000),Order INT IDENTITY(1,1) NOT NULL)
+	DECLARE @List TABLE (item VARCHAR(1000),Orden INT IDENTITY(1,1) NOT NULL)
 
-	SET  @sDelimiter = ';'
 	WHILE CHARINDEX(@sDelimiter,@sInputList,0) <> 0
 		BEGIN
 			SELECT
@@ -36,9 +35,8 @@ BEGIN
 		(
 			SELECT item
 			FROM @List
-			WHERE Order=@sIndex
+			WHERE Orden=@sIndex
 		)
 
 END
-GO
 
